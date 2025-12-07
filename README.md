@@ -44,7 +44,7 @@ display:
 
 ### Language Configuration
 ```yaml
-language: en_us  # en_us or pt_br
+language: en_us  # en_us, pt_br or es_es
 ```
 ### Colors Configuration
 ```yaml
@@ -145,7 +145,7 @@ The compiled jar will be available in `build/libs/`
 
 ## Requirements
 
-- Java 17 or higher
+- Java 21 or higher
 - Minecraft Server 1.21.1+
 - Paper/Spigot server
 - PlaceholderAPI (optional)
