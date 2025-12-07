@@ -1,0 +1,85 @@
+commands:
+  no_permission: "&c¡No tienes permisos para ejecutar ese comando!"
+  player_only: "&cEste comando es solo para jugadores."
+  unknown_command: "&cComando desconocido. Usa /tiertagger help para más ayuda."
+  unknown: "&cComando desconocido. Usa /tiertagger help para más ayuda."
+  invalid_usage: "&cUso: {usage}"
+  help:
+    header: "&6=== TierTagger Commands ==="
+    reload: "&e/tiertagger reload &7- Recargar la configuración del plugin"
+    tier: "&e/tier <player> &7- Mirar el tier del jugador."
+    display: "&e/display &7- Interacambiar la visión de tu tier hacia los demás."
+    tieroff: "&e/tieroff &7- Activar o desactivar los tiers. (Solo para admins)"
+  tier:
+    usage: "&cUso: /tier <player>"
+    searching: "&eBuscando información del tier de {player}..."
+    not_found: "&cNo se ha encontrado información del tier de {player}."
+  reload:
+    success: "&a¡TierTagger configuración recargada con exito!"
+    cache_cleared: "&eCache cleared - Las implementaciones de la API entrarán en contacto ahora."
+    error: "&cError al recargar la configuración: {error}"
+
+reload:
+  success: "&a¡TierTagger configuración recargada con exito!"
+  error: "&cError al recargar la configuración: {error}"
+
+tier:
+  searching: "&eBuscando información del tier de {player}..."
+  not_found: "&No se ha encontrado información de tier de {player}."
+  header: "&6=== Tier de {player}{cache} ==="
+  cached_indicator: " &7(cached)"
+  best_tier: "&eBest Tier: &f{tier}"
+  gamemode_tiers: "&eGamemode Tiers:"
+  gamemode_entry: "&7  {gamemode}: &f{tier} &7(#{position})"
+  region: "&eRegión: &f{region}"
+  points: "&ePuntos: &f{points}"
+  overall_rank: "&eOverall Rank: &f#{rank}"
+
+display:
+  enabled: "&aMostrar Tier &aactivado&a para tí."
+  disabled: "&cMostrar Tier &cdesactivado&c para tí."
+
+hidetier:
+  hidden: "&cTu tier ahora se encuentra oculto para todos los jugadores"
+  shown: "&aTu tier ahora se encuentra visible para todos los jugadores"
+
+tieroff:
+  enabled: "&aTier display system has been &aenabled&a globally."
+  disabled: "&cTier display system has been &cdisabled&c globally."
+
+help:
+  header: "&6=== TierTagger Commands ==="
+  reload: "&e/tiertagger reload &7- Reload plugin configuration"
+  tier: "&e/tier <player> &7- Check a player tier"
+  display: "&e/display &7- Toggle tier display for yourself"
+  tieroff: "&e/tieroff &7- Toggle tier system globally (Admin only)"
+
+tiers:
+  ht1: "&c&lHigh Tier 1"
+  lt1: "&6&lLow Tier 1"
+  ht2: "&e&lHigh Tier 2"
+  lt2: "&a&lLow Tier 2"
+  ht3: "&b&lHigh Tier 3"
+  lt3: "&9&lLow Tier 3"
+  ht4: "&d&lHigh Tier 4"
+  lt4: "&5&lLow Tier 4"
+  ht5: "&7&lHigh Tier 5"
+  lt5: "&8&lLow Tier 5"
+  unranked: "&fUnranked"
+
+gamemodes:
+  vanilla: "Vanilla"
+  sword: "Sword"
+  pot: "Pot"
+  uhc: "UHC"
+  axe: "Axe"
+  nethop: "Netherite OP"
+  mace: "Mace"
+  smp: "SMP"
+  crystal: "Crystal"
+
+debug:
+  loaded_cache: "Loaded cached tier data for {player}"
+  fetched_cache: "Fetched and cached tier data for {player}"
+  no_data: "No tier data found for {player}"
+  cleaned_cache: "Cleaned {count} expired cache entries"
