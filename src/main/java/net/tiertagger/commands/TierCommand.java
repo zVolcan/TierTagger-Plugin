@@ -7,8 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 public class TierCommand implements CommandExecutor {
     
@@ -19,7 +18,7 @@ public class TierCommand implements CommandExecutor {
     }
     
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("tiertagger.tiersearch")) {
             sender.sendMessage(plugin.getLanguageManager().getMessage("commands.no_permission", new String[0]));
             return true;
@@ -118,19 +117,19 @@ public class TierCommand implements CommandExecutor {
     }
     
     private String formatTierDisplay(String tier) {
-        switch (tier.toUpperCase()) {
-            case "HT1": return "§c§lHigh Tier 1";
-            case "LT1": return "§6§lLow Tier 1";
-            case "HT2": return "§e§lHigh Tier 2";
-            case "LT2": return "§a§lLow Tier 2";
-            case "HT3": return "§b§lHigh Tier 3";
-            case "LT3": return "§9§lLow Tier 3";
-            case "HT4": return "§d§lHigh Tier 4";
-            case "LT4": return "§5§lLow Tier 4";
-            case "HT5": return "§7§lHigh Tier 5";
-            case "LT5": return "§8§lLow Tier 5";
-            default: return "§fUnranked";
-        }
+        return switch (tier.toUpperCase()) {
+            case "HT1" -> "§c§lHigh Tier 1";
+            case "LT1" -> "§6§lLow Tier 1";
+            case "HT2" -> "§e§lHigh Tier 2";
+            case "LT2" -> "§a§lLow Tier 2";
+            case "HT3" -> "§b§lHigh Tier 3";
+            case "LT3" -> "§9§lLow Tier 3";
+            case "HT4" -> "§d§lHigh Tier 4";
+            case "LT4" -> "§5§lLow Tier 4";
+            case "HT5" -> "§7§lHigh Tier 5";
+            case "LT5" -> "§8§lLow Tier 5";
+            default -> "§fUnranked";
+        };
     }
     
     private String capitalizeFirst(String str) {

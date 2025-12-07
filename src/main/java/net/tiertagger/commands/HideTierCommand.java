@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class HideTierCommand implements CommandExecutor {
     
@@ -15,14 +16,12 @@ public class HideTierCommand implements CommandExecutor {
     }
     
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(plugin.getLanguageManager().getMessage("commands.player_only"));
             return true;
         }
-        
-        Player player = (Player) sender;
-        
+
         if (!player.hasPermission("tiertagger.hidetier")) {
             player.sendMessage(plugin.getLanguageManager().getMessage("commands.no_permission"));
             return true;

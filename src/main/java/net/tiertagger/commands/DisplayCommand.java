@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class DisplayCommand implements CommandExecutor {
     
@@ -15,20 +16,18 @@ public class DisplayCommand implements CommandExecutor {
     }
     
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("tiertagger.display")) {
             sender.sendMessage(plugin.getLanguageManager().getMessage("commands.no_permission"));
             return true;
         }
         
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(plugin.getLanguageManager().getMessage("commands.player_only"));
             return true;
         }
-        
-        Player player = (Player) sender;
+
         plugin.getTierDisplayManager().toggleDisplay(player);
-        
         boolean displayEnabled = plugin.getTierDisplayManager().isPlayerDisplayEnabled(player);
         
         if (displayEnabled) {
