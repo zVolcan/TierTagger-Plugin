@@ -1,6 +1,6 @@
 # I did a very well detailed config, so no errors for you <3
 api:
-  # Available options: MCTIERS, SOUTH_TIERS
+  # Available options: MCTIERS, SOUTH_TIERS, PVPTIERS
   provider: MCTIERS
   # Default gamemode to check (for MCTiers API only)
   # Gamemodes: vanilla, sword, pot, uhc, axe, nethop, mace, smp
