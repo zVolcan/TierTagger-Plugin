@@ -64,19 +64,19 @@ public class PlayerTierData {
     }
     
     private String formatTier(int tier) {
-        switch (tier) {
-            case 1: return "HT1";
-            case 2: return "LT1";
-            case 3: return "HT2";
-            case 4: return "LT2";
-            case 5: return "HT3";
-            case 6: return "LT3";
-            case 7: return "HT4";
-            case 8: return "LT4";
-            case 9: return "HT5";
-            case 10: return "LT5";
-            default: return "UNRANKED";
-        }
+        return switch (tier) {
+            case 1 -> "HT1";
+            case 2 -> "LT1";
+            case 3 -> "HT2";
+            case 4 -> "LT2";
+            case 5 -> "HT3";
+            case 6 -> "LT3";
+            case 7 -> "HT4";
+            case 8 -> "LT4";
+            case 9 -> "HT5";
+            case 10 -> "LT5";
+            default -> "UNRANKED";
+        };
     }
     
     public static PlayerTierData fromMCTiersJson(String jsonString) {
