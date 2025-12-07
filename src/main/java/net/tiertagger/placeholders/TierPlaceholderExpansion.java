@@ -4,6 +4,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.tiertagger.TierTaggerPlugin;
 import net.tiertagger.models.PlayerTierData;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -18,17 +19,17 @@ public class TierPlaceholderExpansion extends PlaceholderExpansion {
     }
     
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "tiertagger";
     }
     
     @Override
-    public String getAuthor() {
+    public @NotNull String getAuthor() {
         return plugin.getDescription().getAuthors().toString();
     }
     
     @Override
-    public String getVersion() {
+    public @NotNull String getVersion() {
         return plugin.getDescription().getVersion();
     }
     
@@ -38,7 +39,7 @@ public class TierPlaceholderExpansion extends PlaceholderExpansion {
     }
     
     @Override
-    public String onPlaceholderRequest(Player player, String params) {
+    public String onPlaceholderRequest(Player player, @NotNull String params) {
         if (player == null) {
             return "";
         }
@@ -59,95 +60,34 @@ public class TierPlaceholderExpansion extends PlaceholderExpansion {
             }
             
             PlayerTierData tierData = cachedData.get();
-            
-            switch (params.toLowerCase()) {
-                case "tier":
-                case "best_tier":
-                    return tierData.getBestTier();
-                    
-                case "tier_formatted":
-                case "best_tier_formatted":
-                    return formatTierDisplay(tierData.getBestTier());
-                    
-                case "points":
-                    return String.valueOf(tierData.getPoints());
-                    
-                case "overall":
-                case "overall_rank":
-                    return String.valueOf(tierData.getOverall());
-                    
-                case "region":
-                    return tierData.getRegion() != null ? tierData.getRegion() : "";
-                    
-                case "vanilla":
-                case "vanilla_tier":
-                    return tierData.getTierForGamemode("vanilla");
-                    
-                case "sword":
-                case "sword_tier":
-                    return tierData.getTierForGamemode("sword");
-                    
-                case "pot":
-                case "pot_tier":
-                    return tierData.getTierForGamemode("pot");
-                    
-                case "uhc":
-                case "uhc_tier":
-                    return tierData.getTierForGamemode("uhc");
-                    
-                case "axe":
-                case "axe_tier":
-                    return tierData.getTierForGamemode("axe");
-                    
-                case "nethop":
-                case "nethop_tier":
-                    return tierData.getTierForGamemode("nethop");
-                    
-                case "mace":
-                case "mace_tier":
-                    return tierData.getTierForGamemode("mace");
-                    
-                case "smp":
-                case "smp_tier":
-                    return tierData.getTierForGamemode("smp");
-                    
-                case "crystal":
-                case "crystal_tier":
-                    return tierData.getTierForGamemode("crystal");
-                    
-                case "ht1":
-                    return tierData.getBestTier().equals("HT1") ? "HT1" : "";
-                    
-                case "lt1":
-                    return tierData.getBestTier().equals("LT1") ? "LT1" : "";
-                    
-                case "ht2":
-                    return tierData.getBestTier().equals("HT2") ? "HT2" : "";
-                    
-                case "lt2":
-                    return tierData.getBestTier().equals("LT2") ? "LT2" : "";
-                    
-                case "ht3":
-                    return tierData.getBestTier().equals("HT3") ? "HT3" : "";
-                    
-                case "lt3":
-                    return tierData.getBestTier().equals("LT3") ? "LT3" : "";
-                    
-                case "ht4":
-                    return tierData.getBestTier().equals("HT4") ? "HT4" : "";
-                    
-                case "lt4":
-                    return tierData.getBestTier().equals("LT4") ? "LT4" : "";
-                    
-                case "ht5":
-                    return tierData.getBestTier().equals("HT5") ? "HT5" : "";
-                    
-                case "lt5":
-                    return tierData.getBestTier().equals("LT5") ? "LT5" : "";
-                    
-                default:
-                    return getDefaultPlaceholderValue(params);
-            }
+
+            return switch (params.toLowerCase()) {
+                case "tier", "best_tier" -> tierData.getBestTier();
+                case "tier_formatted", "best_tier_formatted" -> formatTierDisplay(tierData.getBestTier());
+                case "points" -> String.valueOf(tierData.getPoints());
+                case "overall", "overall_rank" -> String.valueOf(tierData.getOverall());
+                case "region" -> tierData.getRegion() != null ? tierData.getRegion() : "";
+                case "vanilla", "vanilla_tier" -> tierData.getTierForGamemode("vanilla");
+                case "sword", "sword_tier" -> tierData.getTierForGamemode("sword");
+                case "pot", "pot_tier" -> tierData.getTierForGamemode("pot");
+                case "uhc", "uhc_tier" -> tierData.getTierForGamemode("uhc");
+                case "axe", "axe_tier" -> tierData.getTierForGamemode("axe");
+                case "nethop", "nethop_tier" -> tierData.getTierForGamemode("nethop");
+                case "mace", "mace_tier" -> tierData.getTierForGamemode("mace");
+                case "smp", "smp_tier" -> tierData.getTierForGamemode("smp");
+                case "crystal", "crystal_tier" -> tierData.getTierForGamemode("crystal");
+                case "ht1" -> tierData.getBestTier().equals("HT1") ? "HT1" : "";
+                case "lt1" -> tierData.getBestTier().equals("LT1") ? "LT1" : "";
+                case "ht2" -> tierData.getBestTier().equals("HT2") ? "HT2" : "";
+                case "lt2" -> tierData.getBestTier().equals("LT2") ? "LT2" : "";
+                case "ht3" -> tierData.getBestTier().equals("HT3") ? "HT3" : "";
+                case "lt3" -> tierData.getBestTier().equals("LT3") ? "LT3" : "";
+                case "ht4" -> tierData.getBestTier().equals("HT4") ? "HT4" : "";
+                case "lt4" -> tierData.getBestTier().equals("LT4") ? "LT4" : "";
+                case "ht5" -> tierData.getBestTier().equals("HT5") ? "HT5" : "";
+                case "lt5" -> tierData.getBestTier().equals("LT5") ? "LT5" : "";
+                default -> getDefaultPlaceholderValue(params);
+            };
             
         } catch (Exception e) {
             return getDefaultPlaceholderValue(params);
@@ -155,47 +95,15 @@ public class TierPlaceholderExpansion extends PlaceholderExpansion {
     }
     
     private String getDefaultPlaceholderValue(String params) {
-        switch (params.toLowerCase()) {
-            case "tier":
-            case "best_tier":
-            case "vanilla":
-            case "sword":
-            case "pot":
-            case "uhc":
-            case "axe":
-            case "nethop":
-            case "mace":
-            case "smp":
-            case "crystal":
-                return "UNRANKED";
-                
-            case "tier_formatted":
-            case "best_tier_formatted":
-                return "§fUnranked";
-                
-            case "points":
-            case "overall":
-            case "overall_rank":
-                return "0";
-                
-            case "region":
-                return "";
-                
-            case "ht1":
-            case "lt1":
-            case "ht2":
-            case "lt2":
-            case "ht3":
-            case "lt3":
-            case "ht4":
-            case "lt4":
-            case "ht5":
-            case "lt5":
-                return "";
-                
-            default:
-                return "";
-        }
+        return switch (params.toLowerCase()) {
+            case "tier", "best_tier", "vanilla", "sword", "pot", "uhc", "axe", "nethop", "mace", "smp", "crystal" ->
+                    "UNRANKED";
+            case "tier_formatted", "best_tier_formatted" -> "§fUnranked";
+            case "points", "overall", "overall_rank" -> "0";
+            case "region" -> "";
+            case "ht1", "lt1", "ht2", "lt2", "ht3", "lt3", "ht4", "lt4", "ht5", "lt5" -> "";
+            default -> "";
+        };
     }
     
     private String formatTierDisplay(String tier) {

@@ -1,5 +1,7 @@
 package net.tiertagger.listeners;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.tiertagger.TierTaggerPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +18,7 @@ public class ChatListener implements Listener {
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
+    public void onPlayerChat(AsyncChatEvent event) {
         if (!plugin.getConfigurationManager().isDisplayEnabled() ||
             !plugin.getTierDisplayManager().isGlobalDisplayEnabled() ||
             !plugin.getConfigurationManager().isShowInChat()) {
@@ -33,25 +35,25 @@ public class ChatListener implements Listener {
         
         if (tier != null && !tier.equals("UNRANKED")) {
             String coloredTier = getColoredTier(tier);
-            String displayName = coloredTier + " §7| §f" + player.getName();
+            String displayName = coloredTier + " <gray>| <white>" + player.getName();
             
-            event.setFormat(displayName + "§f: %2$s");
+            event.message(MiniMessage.miniMessage().deserialize(displayName + "<white>: %2$s"));
         }
     }
     
     private String getColoredTier(String tier) {
-        switch (tier.toUpperCase()) {
-            case "HT1": return "§c" + tier;
-            case "LT1": return "§6" + tier;
-            case "HT2": return "§e" + tier;
-            case "LT2": return "§a" + tier;
-            case "HT3": return "§b" + tier;
-            case "LT3": return "§9" + tier;
-            case "HT4": return "§d" + tier;
-            case "LT4": return "§5" + tier;
-            case "HT5": return "§7" + tier;
-            case "LT5": return "§8" + tier;
-            default: return "§f" + tier;
-        }
+        return switch (tier.toUpperCase()) {
+            case "HT1" -> "§c" + tier;
+            case "LT1" -> "§6" + tier;
+            case "HT2" -> "§e" + tier;
+            case "LT2" -> "§a" + tier;
+            case "HT3" -> "§b" + tier;
+            case "LT3" -> "§9" + tier;
+            case "HT4" -> "§d" + tier;
+            case "LT4" -> "§5" + tier;
+            case "HT5" -> "§7" + tier;
+            case "LT5" -> "§8" + tier;
+            default -> "§f" + tier;
+        };
     }
 }

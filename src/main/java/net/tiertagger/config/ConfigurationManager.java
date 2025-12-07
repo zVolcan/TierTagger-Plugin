@@ -110,7 +110,8 @@ public class ConfigurationManager {
     
     public enum ApiProvider {
         MCTIERS,
-        SOUTH_TIERS
+        SOUTH_TIERS,
+        PVPTIERS
     }
     
     public static class TierColor {

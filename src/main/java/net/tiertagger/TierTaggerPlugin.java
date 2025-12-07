@@ -16,6 +16,8 @@ import net.tiertagger.services.ApiServiceManager;
 import net.tiertagger.services.TierDisplayManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
+
 public final class TierTaggerPlugin extends JavaPlugin {
     
     private ConfigurationManager configurationManager;
@@ -41,6 +43,8 @@ public final class TierTaggerPlugin extends JavaPlugin {
         if (databaseManager != null) {
             databaseManager.shutdown();
         }
+
+        apiServiceManager.shutdown();
         getLogger().info("TierTagger has been disabled");
     }
     
@@ -58,11 +62,11 @@ public final class TierTaggerPlugin extends JavaPlugin {
     }
     
     private void registerCommands() {
-        getCommand("tier").setExecutor(new TierCommand(this));
-        getCommand("display").setExecutor(new DisplayCommand(this));
-        getCommand("tieroff").setExecutor(new TierOffCommand(this));
-        getCommand("hidetier").setExecutor(new HideTierCommand(this));
-        getCommand("tiertagger").setExecutor(new TierTaggerCommand(this));
+        Objects.requireNonNull(getCommand("tier")).setExecutor(new TierCommand(this));
+        Objects.requireNonNull(getCommand("display")).setExecutor(new DisplayCommand(this));
+        Objects.requireNonNull(getCommand("tieroff")).setExecutor(new TierOffCommand(this));
+        Objects.requireNonNull(getCommand("hidetier")).setExecutor(new HideTierCommand(this));
+        Objects.requireNonNull(getCommand("tiertagger")).setExecutor(new TierTaggerCommand(this));
     }
     
     private void registerListeners() {

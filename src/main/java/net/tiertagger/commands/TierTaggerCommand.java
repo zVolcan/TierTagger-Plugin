@@ -4,7 +4,7 @@ import net.tiertagger.TierTaggerPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class TierTaggerCommand implements CommandExecutor {
     
@@ -15,30 +15,27 @@ public class TierTaggerCommand implements CommandExecutor {
     }
     
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 0) {
             sendHelpMessage(sender);
             return true;
         }
         
         String subCommand = args[0].toLowerCase();
-        
+
         switch (subCommand) {
-            case "reload":
-                return handleReload(sender);
-            case "help":
-                sendHelpMessage(sender);
-                return true;
-            default:
-                sender.sendMessage(plugin.getLanguageManager().getMessage("commands.unknown"));
-                return true;
+            case "reload" -> handleReload(sender);
+            case "help" -> sendHelpMessage(sender);
+            default -> sender.sendMessage(plugin.getLanguageManager().getMessage("commands.unknown"));
         }
+
+        return true;
     }
     
-    private boolean handleReload(CommandSender sender) {
+    private void handleReload(CommandSender sender) {
         if (!sender.hasPermission("tiertagger.reload")) {
             sender.sendMessage(plugin.getLanguageManager().getMessage("commands.no_permission"));
-            return true;
+            return;
         }
         
         try {
@@ -50,8 +47,6 @@ public class TierTaggerCommand implements CommandExecutor {
         } catch (Exception e) {
             sender.sendMessage(plugin.getLanguageManager().getMessage("commands.reload.error", "error", e.getMessage()));
         }
-        
-        return true;
     }
     
     private void sendHelpMessage(CommandSender sender) {

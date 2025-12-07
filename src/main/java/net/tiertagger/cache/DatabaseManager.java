@@ -94,25 +94,25 @@ public class DatabaseManager {
         }, executorService);
     }
     
-    public CompletableFuture<Void> cacheTierData(String uuid, String username, PlayerTierData tierData) {
-        return CompletableFuture.runAsync(() -> {
+    public void cacheTierData(String uuid, String username, PlayerTierData tierData) {
+        CompletableFuture.runAsync(() -> {
             try {
                 String insertSQL = """
-                    MERGE INTO player_tiers (uuid, username, tier_data, cached_at, expires_at)
-                    KEY (uuid)
-                    VALUES (?, ?, ?, ?, ?)
-                """;
-                
+                            MERGE INTO player_tiers (uuid, username, tier_data, cached_at, expires_at)
+                            KEY (uuid)
+                            VALUES (?, ?, ?, ?, ?)
+                        """;
+
                 LocalDateTime now = LocalDateTime.now();
                 LocalDateTime expiresAt = now.plusMinutes(plugin.getConfigurationManager().getCacheDuration());
-                
+
                 try (PreparedStatement statement = connection.prepareStatement(insertSQL)) {
                     statement.setString(1, uuid);
                     statement.setString(2, username);
                     statement.setString(3, tierData.toJson());
                     statement.setTimestamp(4, Timestamp.valueOf(now));
                     statement.setTimestamp(5, Timestamp.valueOf(expiresAt));
-                    
+
                     statement.executeUpdate();
                 }
             } catch (SQLException e) {

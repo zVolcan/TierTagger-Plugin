@@ -1,17 +1,16 @@
 package net.tiertagger.services;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.tiertagger.TierTaggerPlugin;
 import net.tiertagger.config.ConfigurationManager;
 import net.tiertagger.models.PlayerTierData;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.awt.*;
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -134,18 +133,18 @@ public class TierDisplayManager {
     
     private void showTierName(Player player, String tier) {
         if (tierHiddenPlayers.contains(player.getUniqueId())) {
-            player.setDisplayName(player.getName());
-            player.setPlayerListName(player.getName());
+            player.displayName(MiniMessage.miniMessage().deserialize(player.getName()));
+            player.playerListName(MiniMessage.miniMessage().deserialize(player.getName()));
             return;
         }
         
         String coloredTier = applyTierColor(tier);
-        String displayName = coloredTier + " §7| §f" + player.getName();
+        String displayName = coloredTier + " <gray>| <white>" + player.getName();
         
-        player.setDisplayName(displayName);
+        player.displayName(MiniMessage.miniMessage().deserialize(displayName));
         
         if (plugin.getConfigurationManager().isShowInChat()) {
-            player.setPlayerListName(displayName);
+            player.playerListName(MiniMessage.miniMessage().deserialize(displayName));
         }
 
         if (plugin.getConfigurationManager().isDisplayShowNametag()) {
@@ -168,8 +167,8 @@ public class TierDisplayManager {
         }
         
         String coloredTier = applyTierColor(tier);
-        team.setPrefix(coloredTier + " §8| ");
-        team.setSuffix("§f");
+        team.prefix(MiniMessage.miniMessage().deserialize(coloredTier + " <dark_gray>| "));
+        team.suffix(MiniMessage.miniMessage().deserialize("<white>"));
         
         team.addEntry(player.getName());
     }
@@ -191,25 +190,23 @@ public class TierDisplayManager {
         if (team == null) {
             team = mainScoreboard.registerNewTeam(teamName);
             String coloredTier = applyTierColor(tier);
-            team.setPrefix(coloredTier + " §7| §f");
+            team.prefix(MiniMessage.miniMessage().deserialize(coloredTier + " §7| §f"));
         }
         
         team.addEntry(player.getName());
     }
     
     private void hideTierName(Player player) {
-        player.setDisplayName(player.getName());
-        player.setPlayerListName(player.getName());
+        player.displayName(MiniMessage.miniMessage().deserialize(player.getName()));
+        player.playerListName(MiniMessage.miniMessage().deserialize(player.getName()));
         
         Scoreboard scoreboard = player.getScoreboard();
-        if (scoreboard != null) {
-            for (Team team : scoreboard.getTeams()) {
-                if (team.getName().startsWith("tier_")) {
-                    team.removeEntry(player.getName());
-                }
+        for (Team team : scoreboard.getTeams()) {
+            if (team.getName().startsWith("tier_")) {
+                team.removeEntry(player.getName());
             }
         }
-        
+
         hideNameTag(player);
     }
     
@@ -227,18 +224,16 @@ public class TierDisplayManager {
 
     private void hideTabList(Player player) {
         Scoreboard scoreboard = player.getScoreboard();
-        if (scoreboard != null) {
-            for (Team team : scoreboard.getTeams()) {
-                if (team.getName().startsWith("tier_") && team.hasEntry(player.getName())) {
-                    team.removeEntry(player.getName());
-                    if (team.getEntries().isEmpty()) {
-                        team.unregister();
-                    }
+        for (Team team : scoreboard.getTeams()) {
+            if (team.getName().startsWith("tier_") && team.hasEntry(player.getName())) {
+                team.removeEntry(player.getName());
+                if (team.getEntries().isEmpty()) {
+                    team.unregister();
                 }
             }
         }
-        
-        player.setPlayerListName(player.getName());
+
+        player.playerListName(MiniMessage.miniMessage().deserialize(player.getName()));
     }
     
     private String applyTierColor(String tier) {
@@ -286,19 +281,19 @@ public class TierDisplayManager {
     }
     
     private String getDefaultTierColor(String tier) {
-        switch (tier.toUpperCase()) {
-            case "HT1": return "§c";
-            case "LT1": return "§6";
-            case "HT2": return "§e";
-            case "LT2": return "§a";
-            case "HT3": return "§b";
-            case "LT3": return "§9";
-            case "HT4": return "§d";
-            case "LT4": return "§5";
-            case "HT5": return "§7";
-            case "LT5": return "§8";
-            default: return "§f";
-        }
+        return switch (tier.toUpperCase()) {
+            case "HT1" -> "<red>";
+            case "LT1" -> "<gold>";
+            case "HT2" -> "<yellow>";
+            case "LT2" -> "<green>";
+            case "HT3" -> "<aqua>";
+            case "LT3" -> "<dark_aqua>";
+            case "HT4" -> "<light_purple>";
+            case "LT4" -> "<dark_purple>";
+            case "HT5" -> "<gray>";
+            case "LT5" -> "<dark_gray>";
+            default -> "<white>";
+        };
     }
     
     public boolean isGlobalDisplayEnabled() {

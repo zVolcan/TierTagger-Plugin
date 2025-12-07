@@ -1,5 +1,6 @@
 package net.tiertagger.listeners;
 
+import net.kyori.adventure.text.Component;
 import net.tiertagger.TierTaggerPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,8 +36,8 @@ public class PlayerDisplayListener implements Listener {
             if (cleanTeam == null) {
                 cleanTeam = cleanScoreboard.registerNewTeam(cleanTeamName);
             }
-            cleanTeam.setPrefix("");
-            cleanTeam.setSuffix("");
+            cleanTeam.prefix(Component.text(""));
+            cleanTeam.suffix(Component.text(""));
             cleanTeam.addEntry(onlinePlayer.getName());
         }
         
