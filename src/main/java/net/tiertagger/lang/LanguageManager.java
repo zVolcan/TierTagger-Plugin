@@ -10,11 +10,11 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class LanguageManager {
     
     private final TierTaggerPlugin plugin;
-    private FileConfiguration languageConfig;
     private final Map<String, String> messages;
     
     public LanguageManager(TierTaggerPlugin plugin) {
@@ -35,8 +35,8 @@ public class LanguageManager {
         if (!langFile.exists()) {
             plugin.saveResource(fileName, false);
         }
-        
-        languageConfig = YamlConfiguration.loadConfiguration(langFile);
+
+        FileConfiguration languageConfig = YamlConfiguration.loadConfiguration(langFile);
         
         InputStream defaultStream = plugin.getResource(fileName);
         if (defaultStream != null) {
@@ -54,7 +54,7 @@ public class LanguageManager {
             String fullPath = path.isEmpty() ? key : path + "." + key;
             
             if (config.isConfigurationSection(key)) {
-                loadMessagesFromSection(config.getConfigurationSection(key), fullPath);
+                loadMessagesFromSection(Objects.requireNonNull(config.getConfigurationSection(key)), fullPath);
             } else {
                 String value = config.getString(key, "");
                 messages.put(fullPath, value);
@@ -67,7 +67,7 @@ public class LanguageManager {
             String fullPath = path.isEmpty() ? key : path + "." + key;
             
             if (section.isConfigurationSection(key)) {
-                loadMessagesFromSection(section.getConfigurationSection(key), fullPath);
+                loadMessagesFromSection(Objects.requireNonNull(section.getConfigurationSection(key)), fullPath);
             } else {
                 String value = section.getString(key, "");
                 messages.put(fullPath, value);
