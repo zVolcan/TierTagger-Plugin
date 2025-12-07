@@ -5,7 +5,8 @@ api-version: 1.21
 author: Visivel
 description: Display player tiers from MCTiers and South Tiers
 website: https://github.com/tiertagger/tiertagger
-
+contributors:
+  - zvolcan
 depend: []
 softdepend: [PlaceholderAPI]
 
