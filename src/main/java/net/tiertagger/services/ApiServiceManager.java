@@ -9,10 +9,7 @@ import org.apache.hc.client5.http.async.methods.SimpleRequestBuilder;
 import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClients;
 import org.apache.hc.core5.concurrent.FutureCallback;
-import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.util.Timeout;
 
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +20,8 @@ public class ApiServiceManager {
     
     private static final String MCTIERS_BASE_URL = "https://api.uku3lig.net/tiers/profile/";
     private static final String SOUTH_TIERS_BASE_URL = "http://too-butler.gl.at.ply.gg:1247/api/profile/";
-    
+    private static final String PVPTIERS_BASE_URL = "http://pvptiers.com/api/profile/";
+
     public ApiServiceManager(TierTaggerPlugin plugin) {
         this.plugin = plugin;
         this.httpClient = HttpAsyncClients.createDefault();
@@ -32,15 +30,12 @@ public class ApiServiceManager {
     
     public CompletableFuture<PlayerTierData> fetchPlayerTierData(String playerIdentifier, boolean isUuid) {
         ConfigurationManager.ApiProvider provider = plugin.getConfigurationManager().getApiProvider();
-        
-        switch (provider) {
-            case MCTIERS:
-                return fetchFromMCTiers(playerIdentifier, isUuid);
-            case SOUTH_TIERS:
-                return fetchFromSouthTiers(playerIdentifier, isUuid);
-            default:
-                return CompletableFuture.completedFuture(null);
-        }
+
+        return switch (provider) {
+            case MCTIERS -> fetchFromMCTiers(playerIdentifier, isUuid);
+            case SOUTH_TIERS -> fetchFromSouthTiers(playerIdentifier, isUuid);
+            case PVPTIERS -> fetchFromPvPTiers(playerIdentifier, isUuid);
+        };
     }
     
     private CompletableFuture<PlayerTierData> fetchFromMCTiers(String playerIdentifier, boolean isUuid) {
@@ -61,7 +56,7 @@ public class ApiServiceManager {
         SimpleHttpRequest request = SimpleRequestBuilder.get(url)
                 .build();
         
-        httpClient.execute(request, new FutureCallback<SimpleHttpResponse>() {
+        httpClient.execute(request, new FutureCallback<>() {
             @Override
             public void completed(SimpleHttpResponse response) {
                 try {
@@ -80,13 +75,13 @@ public class ApiServiceManager {
                     future.complete(null);
                 }
             }
-            
+
             @Override
             public void failed(Exception ex) {
                 plugin.getLogger().warning("Failed to fetch from MCTiers: " + ex.getMessage());
                 future.complete(null);
             }
-            
+
             @Override
             public void cancelled() {
                 future.complete(null);
@@ -114,7 +109,7 @@ public class ApiServiceManager {
         SimpleHttpRequest request = SimpleRequestBuilder.get(url)
                 .build();
         
-        httpClient.execute(request, new FutureCallback<SimpleHttpResponse>() {
+        httpClient.execute(request, new FutureCallback<>() {
             @Override
             public void completed(SimpleHttpResponse response) {
                 try {
@@ -136,19 +131,75 @@ public class ApiServiceManager {
                     future.complete(null);
                 }
             }
-            
+
             @Override
             public void failed(Exception ex) {
                 plugin.getLogger().warning("Failed to fetch from South Tiers: " + ex.getMessage());
                 future.complete(null);
             }
-            
+
             @Override
             public void cancelled() {
                 future.complete(null);
             }
         });
         
+        return future;
+    }
+
+    private CompletableFuture<PlayerTierData> fetchFromPvPTiers(String playerIdentifier, boolean isUuid) {
+        CompletableFuture<PlayerTierData> future = new CompletableFuture<>();
+
+        String username = isUuid ? getUsernameFromUuid(playerIdentifier) : playerIdentifier;
+        if (username == null) {
+            future.complete(null);
+            return future;
+        }
+
+        String url = PVPTIERS_BASE_URL + username;
+
+        if (plugin.getConfigurationManager().isLogApiRequests()) {
+            plugin.getLogger().info("Fetching data from South Tiers: " + url);
+        }
+
+        SimpleHttpRequest request = SimpleRequestBuilder.get(url)
+                .build();
+
+        httpClient.execute(request, new FutureCallback<>() {
+            @Override
+            public void completed(SimpleHttpResponse response) {
+                try {
+                    if (response.getCode() == 200) {
+                        String responseBody = response.getBodyText();
+                        PlayerTierData tierData = PlayerTierData.fromSouthTiersJson(responseBody);
+                        if (isUuid) {
+                            tierData.setUuid(playerIdentifier);
+                        }
+                        future.complete(tierData);
+                    } else {
+                        if (plugin.getConfigurationManager().isDebugEnabled()) {
+                            plugin.getLogger().warning("PvPTiers returned status: " + response.getCode());
+                        }
+                        future.complete(null);
+                    }
+                } catch (Exception e) {
+                    plugin.getLogger().warning("Error parsing PvPTiers response: " + e.getMessage());
+                    future.complete(null);
+                }
+            }
+
+            @Override
+            public void failed(Exception ex) {
+                plugin.getLogger().warning("Failed to fetch from PvPTiers: " + ex.getMessage());
+                future.complete(null);
+            }
+
+            @Override
+            public void cancelled() {
+                future.complete(null);
+            }
+        });
+
         return future;
     }
     
@@ -159,7 +210,7 @@ public class ApiServiceManager {
         SimpleHttpRequest request = SimpleRequestBuilder.get(url)
                 .build();
         
-        httpClient.execute(request, new FutureCallback<SimpleHttpResponse>() {
+        httpClient.execute(request, new FutureCallback<>() {
             @Override
             public void completed(SimpleHttpResponse response) {
                 try {
@@ -176,12 +227,12 @@ public class ApiServiceManager {
                     future.complete(null);
                 }
             }
-            
+
             @Override
             public void failed(Exception ex) {
                 future.complete(null);
             }
-            
+
             @Override
             public void cancelled() {
                 future.complete(null);
@@ -202,7 +253,7 @@ public class ApiServiceManager {
         SimpleHttpRequest request = SimpleRequestBuilder.get(url)
                 .build();
         
-        httpClient.execute(request, new FutureCallback<SimpleHttpResponse>() {
+        httpClient.execute(request, new FutureCallback<>() {
             @Override
             public void completed(SimpleHttpResponse response) {
                 try {
@@ -218,12 +269,12 @@ public class ApiServiceManager {
                     future.complete(null);
                 }
             }
-            
+
             @Override
             public void failed(Exception ex) {
                 future.complete(null);
             }
-            
+
             @Override
             public void cancelled() {
                 future.complete(null);
